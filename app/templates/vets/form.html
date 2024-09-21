@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+            <h1>Nuevo Veterinario</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+            <form class="vstack gap-3 {% if errors %}was-validated{% endif %}"
+                aria-label="Formulario de creacion de veterinario"
+                method="POST"
+                action="{% url 'vets_form' %}"
+                novalidate>
+
+                {% csrf_token %}
+
+                <input type="hidden" value="{{ vet.id }}" name="id" />
+
+                <div>
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text"
+                        id="name"
+                        name="name"
+                        value="{{vet.name}}"
+                        class="form-control"
+                        required/>
+
+                    {% if errors.name %}
+                        <div class="invalid-feedback">
+                            {{ errors.name }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="phone" class="form-label">Teléfono</label>
+                    <input type="text"
+                        id="phone"
+                        name="phone"
+                        class="form-control"
+                        placeholder="Ej: 1123456789"
+                        value="{{vet.phone}}"
+                        pattern = "[0-9]{10}"
+                        maxlength="10"
+                        minlength="10"
+                        required
+                        />
+
+                    {% if errors.phone %}
+                        <div class="invalid-feedback">
+                            {{ errors.phone }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ vet.email }}"
+                        required/>
+
+                    {% if errors.email %}
+                        <div class="invalid-feedback">
+                            {{ errors.email }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="speciality" class="form-label">Especialidad</label>
+                    <select id="speciality" name="speciality" class="form-select" required>
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        {% for value, label in specialities %}
+                            <option value="{{ value }}" {% if vet.speciality == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% if errors.speciality %}
+                        <div class="invalid-feedback">
+                            {{ errors.speciality }}
+                        </div>
+                     {% endif %}
+                </div>
+
+
+                <button class="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
